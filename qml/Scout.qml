@@ -9,14 +9,17 @@ Enemy {
     avatar: "../assets/ships/scout.png"
     score: 150
 
-    Behavior on y { SmoothedAnimation { velocity: 100 } }
+    property real verticalRange: 150
+    property real verticalVelocity: 100
+
+    Behavior on y { SmoothedAnimation { velocity: verticalVelocity } }
 
     SequentialAnimation {
         running: true
         loops: Animation.Infinite
         PauseAnimation { duration: 1500 }
-        ScriptAction { script: { scout.y = scout.y + 150 } }
+        ScriptAction { script: { scout.y = scout.y + verticalRange } }
         PauseAnimation { duration: 1500 }
-        ScriptAction { script: { scout.y = scout.y - 150 } }
+        ScriptAction { script: { scout.y = scout.y - verticalRange } }
     }
 }

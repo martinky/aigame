@@ -44,7 +44,7 @@ Ship {
         running: enemy.firing && enemy.x < gameScene.width
         triggeredOnStart: true
         onTriggered: {
-            // create new projectile
+            // create new enemy projectile
             var projectileProperties = {
                 x: enemy.x,
                 y: enemy.y + enemy.height / 2 - 5,

@@ -2,7 +2,7 @@ import QtQuick 2.0
 import Felgo 3.0
 
 //
-// Projectile entity fired by enemy ships.
+// Projectile fired by enemy ships.
 //
 EntityBase {
     id: enemyProjectile

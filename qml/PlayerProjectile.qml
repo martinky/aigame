@@ -25,7 +25,7 @@ EntityBase {
     MovementAnimation {
         target: playerProjectile
         property: "x"
-        maxPropertyValue: scene.width
+        maxPropertyValue: gameScene.width
         velocity: 300
         running: true
         onLimitReached: {

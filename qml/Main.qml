@@ -21,7 +21,7 @@ GameWindow {
     screenHeight: 640
 
     property alias entityManager: entityManager
-    property alias scene: gameScene
+    property alias gameScene: gameScene
 
     function createExplosion(x, y) {
         var explosionProperties = {
@@ -37,7 +37,6 @@ GameWindow {
 
     function resetGame() {
         state = "GAME"
-        entityManager.removeAllEntities()
         gameScene.reset()
     }
 
@@ -45,113 +44,32 @@ GameWindow {
         gameOverTimer.restart()
     }
 
-    function setGameOverReally() {
-        state = "GAME_OVER"
-    }
-
-    Timer {
-        id: gameOverTimer
-        interval: 1000
-        onTriggered: setGameOverReally()
-    }
-
     EntityManager {
         id: entityManager
         entityContainer: gameScene
     }
 
-    Scene {
+    GameScene {
         id: gameScene
-
         anchors.fill: gameWindow
-        opacity: 0
-
-        // the "logical size" - the scene content is auto-scaled to match the GameWindow size
-        width: 800
-        height: 512
-
-        property int score: 0
-
-        function reset() {
-            score = 0
-            levelLoader.source = ""
-            levelLoader.source = "Level.qml"
-        }
-
-        PhysicsWorld {
-            //debugDrawVisible: true
-            z: 1000
-        }
-
-        Loader {
-            id: levelLoader
-            anchors.fill: parent
-            source: "Level.qml"
-        }
     }
 
-    Scene {
+    GameOverScene {
         id: gameOverScene
-
         anchors.fill: gameWindow
-        opacity: 0
-
-        width: 800
-        height: 512
-
-        Rectangle {
-            anchors.fill: parent
-            color: "black"
-        }
-
-        Column {
-            anchors.centerIn: parent
-            spacing: 5
-
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                color: "darkred"
-                font.pointSize: 14
-                font.bold: true
-
-                text: "GAME OVER"
-            }
-
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                color: "darkred"
-                font.pointSize: 11
-                //font.bold: true
-
-                text: "Your score is: " + gameScene.score
-            }
-
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                color: "darkred"
-                font.pointSize: 10
-                //font.bold: true
-
-                text: "Please tap the screen to restart game."
-            }
-        }
-
-        MouseArea {
-            anchors.fill: parent
-
-            onPressed: {
-                gameWindow.resetGame()
-            }
-        }
     }
 
+    Timer {
+        id: gameOverTimer
+        interval: 1000
+        onTriggered: {
+            gameOverScene.score = gameScene.score
+            gameWindow.state = "GAME_OVER"
+        }
+    }
 
     state: "GAME"
 
-    // state machine, takes care reversing the PropertyChanges when changing the state like changing the opacity back to 0
     states: [
         State {
             name: "GAME"

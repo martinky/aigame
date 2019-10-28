@@ -2,7 +2,7 @@ import Felgo 3.0
 import QtQuick 2.0
 
 //
-// An abstract ship - common parts of both player and enemy ships.
+// Abstract ship - common parts of both player and enemy ships.
 //
 EntityBase {
     id: ship
