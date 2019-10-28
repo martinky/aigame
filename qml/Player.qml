@@ -44,7 +44,7 @@ EntityBase {
 
     Timer {
         repeat: true
-        interval: 150
+        interval: 200
         running: player.firing
         onTriggered: {
             // create new projectile

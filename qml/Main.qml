@@ -50,7 +50,7 @@ GameWindow {
         height: 512
 
         PhysicsWorld {
-            debugDrawVisible: true
+            //debugDrawVisible: true
             z: 1000
         }
 
@@ -82,6 +82,21 @@ GameWindow {
 
         Player {
             id: player
+        }
+
+        Enemy {
+            x: 1200
+            y: 200
+        }
+
+        Enemy {
+            x: 1400
+            y: 250
+        }
+
+        Enemy {
+            x: 1600
+            y: 300
         }
 
     }

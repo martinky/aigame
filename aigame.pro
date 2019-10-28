@@ -62,4 +62,5 @@ macx {
 DISTFILES += \
     qml/Player.qml \
     qml/Explosion.qml \
-    qml/PlayerProjectile.qml
+    qml/PlayerProjectile.qml \
+    qml/Enemy.qml
