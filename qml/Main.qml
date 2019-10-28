@@ -52,6 +52,8 @@ GameWindow {
     GameScene {
         id: gameScene
         anchors.fill: gameWindow
+
+        onGameFinished: setGameOver()
     }
 
     GameOverScene {
@@ -64,6 +66,7 @@ GameWindow {
         interval: 1000
         onTriggered: {
             gameOverScene.score = gameScene.score
+            gameOverScene.victory = gameScene.victory
             gameWindow.state = "GAME_OVER"
         }
     }

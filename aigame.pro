@@ -69,7 +69,8 @@ DISTFILES += \
     qml/Scout.qml \
     qml/Turbo.qml \
     qml/Ship.qml \
-    qml/Level.qml \
     qml/SceneBase.qml \
     qml/GameOverScene.qml \
-    qml/GameScene.qml
+    qml/GameScene.qml \
+    qml/LevelOne.qml \
+    qml/Level.qml

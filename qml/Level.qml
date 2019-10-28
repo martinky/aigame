@@ -1,27 +1,25 @@
 import Felgo 3.0
 import QtQuick 2.0
 
+//
+// Basic building blocks of a level: holds and controls the player entity,
+// level background and enemy entities.
+//
+// The levelFinished() signal is triggered once there are no more enemies alive.
+// Level finish condition is tested periodically by the finishTestTimer.
+//
 Item {
     id: level
 
+    property alias backgroundImage: background.sourceImage
+
+    signal levelFinished()
+
     ParallaxScrollingBackground {
+        id: background
         anchors.fill: parent
 
-        sourceImage: "../assets/background/desert.png"
         movementVelocity: Qt.point(-50, 0)
-    }
-
-    Text {
-        anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.right: parent.right
-        anchors.rightMargin: 25
-
-        color: "white"
-        font.pointSize: 12
-        font.bold: true
-
-        text: "Score: " + gameScene.score
     }
 
     MouseArea {
@@ -40,36 +38,22 @@ Item {
         }
     }
 
-    //TODO: generate enemy entities dynamically
-    //TODO: add victory condition
-
     Player {
         id: player
     }
 
-    Plane {
-        x: 1200
-        y: 200
-    }
+    Timer {
+        id: finishTestTimer
+        interval: 1000
+        running: true
+        repeat: true
 
-    Plane {
-        x: 1400
-        y: 250
-    }
-
-    Plane {
-        x: 1600
-        y: 300
-    }
-
-    Scout {
-        x: 2000
-        y: 100
-    }
-
-    Turbo {
-        x: 2500
-        y: 300
-        firing: true
+        onTriggered: {
+            var enemies = entityManager.getEntityArrayByType("enemy")
+            if (enemies.length == 0) {
+                running = false
+                levelFinished()
+            }
+        }
     }
 }
