@@ -58,3 +58,8 @@ win32 {
 macx {
     ICON = macx/app_icon.icns
 }
+
+DISTFILES += \
+    qml/Player.qml \
+    qml/Explosion.qml \
+    qml/PlayerProjectile.qml
