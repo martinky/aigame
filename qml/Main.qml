@@ -49,6 +49,9 @@ GameWindow {
         width: 800
         height: 512
 
+        // current player score
+        property int score: 0
+
         PhysicsWorld {
             //debugDrawVisible: true
             z: 1000
@@ -61,21 +64,31 @@ GameWindow {
             movementVelocity: Qt.point(-50, 0)
         }
 
+        Text {
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            anchors.right: parent.right
+            anchors.rightMargin: 25
+
+            color: "white"
+            font.pointSize: 12
+            font.bold: true
+
+            text: "Score: " + gameScene.score
+        }
+
         MouseArea {
             anchors.fill: parent
 
             onPressed: {
-                console.log("pressed = " + mouse.x + " , " + mouse.y)
                 player.move(mouse.x, mouse.y, true)
             }
 
             onPositionChanged: {
-                console.log("position = " + mouse.x + " , " + mouse.y)
                 player.move(mouse.x, mouse.y, true)
             }
 
             onReleased: {
-                console.log("released = " + mouse.x + " , " + mouse.y)
                 player.move(mouse.x, mouse.y, false)
             }
         }

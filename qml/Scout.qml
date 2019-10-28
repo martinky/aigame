@@ -1,9 +1,13 @@
 import Felgo 3.0
 import QtQuick 2.0
 
+//
+// Enemy that makes a wawy vertical motion.
+//
 Enemy {
     id: scout
     avatar: "../assets/ships/scout.png"
+    score: 150
 
     Behavior on y { SmoothedAnimation { velocity: 100 } }
 

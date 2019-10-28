@@ -9,6 +9,8 @@ Ship {
     id: enemy
     entityType: "enemy"
 
+    property int score: 100
+
     property real speed: 100
     property bool firing: false
     property int firingInterval: 1500
@@ -22,8 +24,7 @@ Ship {
     }
 
     onShipDestroyed: {
-        //TODO: increase score
-        console.log("GAME OVER")
+        gameScene.score += score
     }
 
     MovementAnimation {
