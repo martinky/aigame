@@ -84,18 +84,28 @@ GameWindow {
             id: player
         }
 
-        Enemy {
+        Plane {
             x: 1200
             y: 200
         }
 
-        Enemy {
+        Plane {
             x: 1400
             y: 250
         }
 
-        Enemy {
+        Plane {
             x: 1600
+            y: 300
+        }
+
+        Scout {
+            x: 2000
+            y: 100
+        }
+
+        Turbo {
+            x: 2500
             y: 300
             firing: true
         }

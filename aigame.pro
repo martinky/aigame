@@ -64,4 +64,8 @@ DISTFILES += \
     qml/Explosion.qml \
     qml/PlayerProjectile.qml \
     qml/Enemy.qml \
-    qml/EnemyProjectile.qml
+    qml/EnemyProjectile.qml \
+    qml/Plane.qml \
+    qml/Scout.qml \
+    qml/Turbo.qml \
+    qml/Ship.qml

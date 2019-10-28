@@ -5,11 +5,11 @@ import Felgo 3.0
 // Player ship entity. Movement is controled by mouse input in the game scene.
 // The ship can fire projectiles rapidly - controlled by the firing property.
 //
-EntityBase {
+Ship {
     id: player
     entityType: "player"
-    width: img.implicitWidth
-    height: img.implicitHeight
+
+    avatar: "../assets/ships/ufo.png"
 
     property bool firing: false
 
@@ -20,42 +20,24 @@ EntityBase {
         player.firing = firing
     }
 
-    // Replaces the player ship with an explosion animation.
-    function explode() {
-        createExplosion(player.x + player.width / 2,
-                        player.y + player.height / 2)
-        player.removeEntity()
+    onCollided: {
+        if (collidedEntity.entityType === "enemyProjectile") {
+            collidedEntity.removeEntity()
+            explode()
+        }
+        if (collidedEntity.entityType === "enemy") {
+            collidedEntity.explode()
+            explode()
+        }
+    }
+
+    onShipDestroyed: {
+        //TODO: game over
+        console.log("GAME OVER")
     }
 
     Behavior on x { SmoothedAnimation { velocity: 300 } }
     Behavior on y { SmoothedAnimation { velocity: 300 } }
-
-    Image {
-        id: img
-        source: "../assets/ships/ufo.png"
-    }
-
-    BoxCollider {
-        id: collider
-        anchors.fill: img
-        anchors.margins: 5
-        collisionTestingOnlyMode: true
-
-        fixture.onBeginContact: {
-            var body = other.getBody();
-            var collidedEntity = body.target;
-            var collidedEntityType = collidedEntity.entityType;
-
-            if (collidedEntityType === "enemyProjectile") {
-                collidedEntity.removeEntity()
-                explode()
-            }
-            if (collidedEntityType === "enemy") {
-                collidedEntity.explode()
-                explode()
-            }
-        }
-    }
 
     Timer {
         repeat: true
