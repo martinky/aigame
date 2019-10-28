@@ -40,12 +40,28 @@ EntityBase {
         anchors.fill: img
         anchors.margins: 5
         collisionTestingOnlyMode: true
+
+        fixture.onBeginContact: {
+            var body = other.getBody();
+            var collidedEntity = body.target;
+            var collidedEntityType = collidedEntity.entityType;
+
+            if (collidedEntityType === "enemyProjectile") {
+                collidedEntity.removeEntity()
+                explode()
+            }
+            if (collidedEntityType === "enemy") {
+                collidedEntity.explode()
+                explode()
+            }
+        }
     }
 
     Timer {
         repeat: true
         interval: 200
         running: player.firing
+        triggeredOnStart: true
         onTriggered: {
             // create new projectile
             var projectileProperties = {
@@ -59,5 +75,4 @@ EntityBase {
                         projectileProperties);
         }
     }
-
 }

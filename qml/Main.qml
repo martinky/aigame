@@ -97,6 +97,7 @@ GameWindow {
         Enemy {
             x: 1600
             y: 300
+            firing: true
         }
 
     }

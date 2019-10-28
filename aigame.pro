@@ -63,4 +63,5 @@ DISTFILES += \
     qml/Player.qml \
     qml/Explosion.qml \
     qml/PlayerProjectile.qml \
-    qml/Enemy.qml
+    qml/Enemy.qml \
+    qml/EnemyProjectile.qml

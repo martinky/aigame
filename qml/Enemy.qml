@@ -14,6 +14,9 @@ EntityBase {
 
     property real speed: 100
     property alias avatar: img.source
+    property bool firing: false
+    property int firingInterval: 1500
+    property real projectileSpeed: 200
 
     // Replaces the ship with an explosion animation.
     function explode() {
@@ -37,8 +40,6 @@ EntityBase {
             var body = other.getBody();
             var collidedEntity = body.target;
             var collidedEntityType = collidedEntity.entityType;
-            //var collidedEntityId = collidedEntity.entityId;
-
 
             if (collidedEntityType === "playerProjectile") {
                 collidedEntity.removeEntity()
@@ -55,6 +56,26 @@ EntityBase {
         running: true
         onLimitReached: {
             enemy.removeEntity()
+        }
+    }
+
+    Timer {
+        repeat: true
+        interval: enemy.firingInterval
+        running: enemy.firing && enemy.x < gameScene.width
+        triggeredOnStart: true
+        onTriggered: {
+            // create new projectile
+            var projectileProperties = {
+                x: enemy.x,
+                y: enemy.y + enemy.height / 2 - 5,
+                rotation: 0,
+                speed: enemy.projectileSpeed
+            }
+
+            entityManager.createEntityFromUrlWithProperties(
+                        Qt.resolvedUrl("EnemyProjectile.qml"),
+                        projectileProperties);
         }
     }
 }

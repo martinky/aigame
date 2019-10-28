@@ -2,17 +2,19 @@ import QtQuick 2.0
 import Felgo 3.0
 
 //
-// Projectile entity fired by the player's ship.
+// Projectile entity fired by enemy ships.
 //
 EntityBase {
-    id: playerProjectile
-    entityType: "playerProjectile"
+    id: enemyProjectile
+    entityType: "enemyProjectile"
     width: img.implicitWidth
     height: img.implicitHeight
 
+    property real speed: 300
+
     Image {
         id: img
-        source: "../assets/projectiles/bullet.png"
+        source: "../assets/projectiles/shot.png"
     }
 
     BoxCollider {
@@ -23,13 +25,13 @@ EntityBase {
     }
 
     MovementAnimation {
-        target: playerProjectile
+        target: enemyProjectile
         property: "x"
-        maxPropertyValue: scene.width
-        velocity: 300
+        minPropertyValue: -enemyProjectile.width
+        velocity: -enemyProjectile.speed
         running: true
         onLimitReached: {
-            playerProjectile.removeEntity()
+            enemyProjectile.removeEntity()
         }
     }
 }
