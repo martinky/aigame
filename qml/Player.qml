@@ -32,7 +32,7 @@ Ship {
     }
 
     onShipDestroyed: {
-        //TODO: game over
+        gameWindow.setGameOver()
         console.log("GAME OVER")
     }
 

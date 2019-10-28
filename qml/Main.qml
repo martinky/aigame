@@ -35,6 +35,26 @@ GameWindow {
                     explosionProperties);
     }
 
+    function resetGame() {
+        state = "GAME"
+        entityManager.removeAllEntities()
+        gameScene.reset()
+    }
+
+    function setGameOver() {
+        gameOverTimer.restart()
+    }
+
+    function setGameOverReally() {
+        state = "GAME_OVER"
+    }
+
+    Timer {
+        id: gameOverTimer
+        interval: 1000
+        onTriggered: setGameOverReally()
+    }
+
     EntityManager {
         id: entityManager
         entityContainer: gameScene
@@ -44,84 +64,106 @@ GameWindow {
         id: gameScene
 
         anchors.fill: gameWindow
+        opacity: 0
 
         // the "logical size" - the scene content is auto-scaled to match the GameWindow size
         width: 800
         height: 512
 
-        // current player score
         property int score: 0
+
+        function reset() {
+            score = 0
+            levelLoader.source = ""
+            levelLoader.source = "Level.qml"
+        }
 
         PhysicsWorld {
             //debugDrawVisible: true
             z: 1000
         }
 
-        ParallaxScrollingBackground {
+        Loader {
+            id: levelLoader
             anchors.fill: parent
+            source: "Level.qml"
+        }
+    }
 
-            sourceImage: "../assets/background/desert.png"
-            movementVelocity: Qt.point(-50, 0)
+    Scene {
+        id: gameOverScene
+
+        anchors.fill: gameWindow
+        opacity: 0
+
+        width: 800
+        height: 512
+
+        Rectangle {
+            anchors.fill: parent
+            color: "black"
         }
 
-        Text {
-            anchors.top: parent.top
-            anchors.topMargin: 10
-            anchors.right: parent.right
-            anchors.rightMargin: 25
+        Column {
+            anchors.centerIn: parent
+            spacing: 5
 
-            color: "white"
-            font.pointSize: 12
-            font.bold: true
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
 
-            text: "Score: " + gameScene.score
+                color: "darkred"
+                font.pointSize: 14
+                font.bold: true
+
+                text: "GAME OVER"
+            }
+
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                color: "darkred"
+                font.pointSize: 11
+                //font.bold: true
+
+                text: "Your score is: " + gameScene.score
+            }
+
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                color: "darkred"
+                font.pointSize: 10
+                //font.bold: true
+
+                text: "Please tap the screen to restart game."
+            }
         }
 
         MouseArea {
             anchors.fill: parent
 
             onPressed: {
-                player.move(mouse.x, mouse.y, true)
-            }
-
-            onPositionChanged: {
-                player.move(mouse.x, mouse.y, true)
-            }
-
-            onReleased: {
-                player.move(mouse.x, mouse.y, false)
+                gameWindow.resetGame()
             }
         }
-
-        Player {
-            id: player
-        }
-
-        Plane {
-            x: 1200
-            y: 200
-        }
-
-        Plane {
-            x: 1400
-            y: 250
-        }
-
-        Plane {
-            x: 1600
-            y: 300
-        }
-
-        Scout {
-            x: 2000
-            y: 100
-        }
-
-        Turbo {
-            x: 2500
-            y: 300
-            firing: true
-        }
-
     }
+
+
+    state: "GAME"
+
+    // state machine, takes care reversing the PropertyChanges when changing the state like changing the opacity back to 0
+    states: [
+        State {
+            name: "GAME"
+            PropertyChanges { target: gameScene; opacity: 1 }
+            PropertyChanges { target: gameWindow; activeScene: gameScene }
+        },
+        State {
+            name: "GAME_OVER"
+            PropertyChanges { target: gameOverScene; opacity: 1 }
+            PropertyChanges { target: gameWindow; activeScene: gameOverScene }
+        }
+        //TODO: menu scene, high-score scene
+    ]
+
 }
