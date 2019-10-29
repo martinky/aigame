@@ -1,9 +1,9 @@
 import Felgo 3.0
 import QtQuick 2.0
 
-//
-// Splash Scene shown at the start of the app.
-//
+/*!
+    \brief Splash Scene shown at the start of the game app.
+*/
 SceneBase {
 
     Rectangle {

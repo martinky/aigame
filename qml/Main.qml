@@ -2,6 +2,9 @@ import QtQuick 2.0
 import Felgo 3.0
 import "scenes"
 
+/*!
+    \brief The root QML item of the game application.
+*/
 GameWindow {
     id: gameWindow
 
@@ -21,14 +24,18 @@ GameWindow {
     screenWidth: 960
     screenHeight: 640
 
+    /*! Property alias for easy access to the EntityManager from other components. */
     property alias entityManager: entityManager
+    /*! Property alias for easy access to the \l GameScene from other components. */
     property alias gameScene: gameScene
 
+    /*! Starts a new game. */
     function resetGame() {
         state = "GAME"
         gameScene.reset()
     }
 
+    /*! Displays an end game screen. */
     function setGameOver() {
         gameOverTimer.restart()
     }

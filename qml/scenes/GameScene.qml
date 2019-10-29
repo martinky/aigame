@@ -1,19 +1,29 @@
 import Felgo 3.0
 import QtQuick 2.0
 
-//
-// Scene that hosts the gameplay.
-//
+/*!
+    \brief Scene that hosts the gameplay.
+
+    Handles \l Level switching and counting of the player's score.
+
+    The game ends when all levels are cleared or the player is destroyed and
+    the \l gameFinished() signal is then triggered.
+*/
 SceneBase {
+    /*! This property holds the player score. */
     property int score: 0
+    /*! This property says whether the game ended in a victory. */
     property bool victory: false
 
-    // array of level source files
+    /*! List of urls to level source files. */
     property variant levels: []
+    /*! \internal Index of the current level. */
     property int currentLevel_: 0
 
+    /*! This signal is triggered once all levels are cleared or the player is destroyed. */
     signal gameFinished()
 
+    /*! Restarts the game from the first level. */
     function reset() {
         currentLevel_ = 0
         score = 0

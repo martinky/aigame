@@ -2,18 +2,27 @@ import Felgo 3.0
 import QtQuick 2.0
 import"../entities"
 
-//
-// Basic building blocks of a level: holds and controls the player entity,
-// level background and enemy entities.
-//
-// The levelFinished() signal is triggered once there are no more enemies alive.
-// Level finish condition is tested periodically by the finishTestTimer.
-//
+/*!
+    \brief This item holds the basic building blocks of a level.
+
+    Contains basic building blocks of a level: the player entity,
+    level background and enemy entities. Handles the input and controls the
+    \l Player ship movements and actions.
+
+    The \l levelFinished() signal is triggered once there are no more enemies
+    alive.
+
+    The background image, number, type and configuration of enemies comprise
+    a specific level and are specified in a derived type.
+*/
 Item {
     id: level
 
+    /*! Sets the url to the background image. */
     property alias backgroundImage: background.sourceImage
 
+    /*! This signal is triggered once all enemies are cleared: either destroyed
+        or went past the left edge of the screen. */
     signal levelFinished()
 
     ParallaxScrollingBackground {

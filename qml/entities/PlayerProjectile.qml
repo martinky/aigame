@@ -1,9 +1,12 @@
 import QtQuick 2.0
 import Felgo 3.0
 
-//
-// Projectile entity fired by the player's ship.
-//
+/*!
+    \brief Projectile entity fired by the \l Player ship.
+
+    If an \l Enemy entity collides with the player's projectile, the enemy is
+    destroyed.
+*/
 EntityBase {
     id: playerProjectile
     entityType: "playerProjectile"

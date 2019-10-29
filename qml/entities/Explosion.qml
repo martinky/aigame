@@ -1,9 +1,9 @@
 import QtQuick 2.0
 import Felgo 3.0
 
-//
-// An explosion animation.
-//
+/*!
+    \brief An explosion animation.
+*/
 EntityBase {
     id: explosion
     entityType: "explosion"

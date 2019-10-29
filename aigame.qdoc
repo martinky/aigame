@@ -1,5 +1,45 @@
 /*!
-  \page index
+    \page index
 
-  Welcome to Alien Invasion game tutorial.
+    Welcome to the Alien Invasion game tutorial.
+
+    \section1 API Documentation
+    Generated documentation for main QML types:
+
+    \list
+        \li \l Main
+        \li Entities
+        \list
+            \li \l Ship
+            \list
+                \li \l Player
+                \li \l Enemy
+                \list
+                    \li \l Plane
+                    \li \l Scout
+                    \li \l Turbo
+                \endlist
+            \endlist
+            \li \l PlayerProjectile
+            \li \l EnemyProjectile
+            \li \l Explosion
+        \endlist
+        \li Scenes
+        \list
+            \li \l SceneBase
+            \list
+                \li \l GameScene
+                \li \l GameOverScene
+                \li \l SplashScene
+            \endlist
+        \endlist
+        \li Levels
+        \list
+            \li \l Level
+            \list
+                \li LevelOne
+                \li LevelTwo
+            \endlist
+        \endlist
+    \endlist
 */

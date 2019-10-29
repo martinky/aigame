@@ -1,12 +1,15 @@
 import Felgo 3.0
 import QtQuick 2.0
 
-//
-// Scene shown at end game - both at game over and victory situations.
-//
+/*!
+    \brief Scene shown at end game - both at game over and victory situations.
+*/
 SceneBase {
 
+    /*! Player score to display. */
     property int score: 0
+    /*! Set this property to \c true when this is a victor endgame or \c false
+        if the player was destroyed and this is game over. */
     property bool victory: false
 
     Rectangle {
