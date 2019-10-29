@@ -1,0 +1,20 @@
+sourcedirs  = .
+outputdir   = doc/html
+imagedirs   = doc/img
+outputformats = HTML
+
+sources.fileextensions  = *.qdoc *.qml
+
+HTML.stylesheets = doc/style/offline.css
+HTML.scripts     =
+
+# Include the style sheets and scripts used.
+
+HTML.headerstyles = \
+    "  <link rel=\"stylesheet\" type=\"text/css\" href=\"style/offline.css\" />\n"
+
+HTML.headerscripts =
+
+HTML.endheader = \
+    "</head>\n" \
+    "<body>\n"
