@@ -11,7 +11,7 @@ Scene {
 
     // scale of the original game
     width: 800
-    height: 512
+    height: 480
 
     Behavior on opacity {
         NumberAnimation {
