@@ -8,17 +8,21 @@ SceneBase {
     property int score: 0
     property bool victory: false
 
-    //TODO: support multiple levels
-    property string levelSource: "LevelOne.qml"
+    // array of level source files
+    property variant levels: []
+    property int currentLevel_: 0
 
     signal gameFinished()
 
     function reset() {
+        currentLevel_ = 0
         score = 0
         victory = false
         entityManager.removeAllEntities()
         levelLoader.source = ""
-        levelLoader.source = levelSource
+        if (currentLevel_ < levels.length) {
+            levelLoader.source = levels[currentLevel_]
+        }
     }
 
     PhysicsWorld {
@@ -29,15 +33,23 @@ SceneBase {
     Loader {
         id: levelLoader
         anchors.fill: parent
-        source: levelSource
+        source: levels[0]
     }
 
     Connections {
         target: levelLoader.item
         onLevelFinished: {
-            victory = true
-            gameFinished()
-            //TODO: go to next level when multiple levels are supported
+            entityManager.removeAllEntities()
+            currentLevel_ ++
+            if (currentLevel_ < levels.length) {
+                // go to next level...
+                levelLoader.source = levels[currentLevel_]
+            } else {
+                // or declare victory if already at last level
+                levelLoader.source = ""
+                victory = true
+                gameFinished()
+            }
         }
     }
 

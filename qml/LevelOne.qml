@@ -8,29 +8,15 @@ Level {
 
     // enemies in this level
 
-    Plane {
-        x: 1200
-        y: 200
-    }
+    Plane { x: 1000; y: 100 }
+    Plane { x: 1200; y: 150 }
+    Plane { x: 1400; y: 200 }
 
-    Plane {
-        x: 1400
-        y: 250
-    }
+    Turbo { x: 2000; y: 200 }
+    Turbo { x: 2100; y: 150 }
+    Turbo { x: 2200; y: 250 }
 
-    Plane {
-        x: 1600
-        y: 300
-    }
-
-    Scout {
-        x: 2000
-        y: 100
-    }
-
-    Turbo {
-        x: 2500
-        y: 300
-        firing: true
-    }
+    Scout { x: 2500; y: 100 }
+    Scout { x: 2600; y: 150 }
+    Scout { x: 2700; y: 50 }
 }

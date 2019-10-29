@@ -51,14 +51,14 @@ GameWindow {
 
     GameScene {
         id: gameScene
-        anchors.fill: gameWindow
+
+        levels: [ "LevelOne.qml", "LevelTwo.qml" ]
 
         onGameFinished: setGameOver()
     }
 
     GameOverScene {
         id: gameOverScene
-        anchors.fill: gameWindow
     }
 
     Timer {
@@ -84,7 +84,7 @@ GameWindow {
             PropertyChanges { target: gameOverScene; opacity: 1 }
             PropertyChanges { target: gameWindow; activeScene: gameOverScene }
         }
-        //TODO: menu scene, high-score scene
+        //TODO: splash scene
     ]
 
 }

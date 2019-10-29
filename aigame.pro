@@ -73,4 +73,5 @@ DISTFILES += \
     qml/GameOverScene.qml \
     qml/GameScene.qml \
     qml/LevelOne.qml \
-    qml/Level.qml
+    qml/Level.qml \
+    qml/LevelTwo.qml

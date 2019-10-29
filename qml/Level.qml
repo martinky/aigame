@@ -40,6 +40,8 @@ Item {
 
     Player {
         id: player
+        x: 20
+        y: 200
     }
 
     Timer {
