@@ -12,7 +12,7 @@ EntityBase {
 
     Image {
         id: img
-        source: "../assets/projectiles/bullet.png"
+        source: "../../assets/projectiles/bullet.png"
     }
 
     BoxCollider {

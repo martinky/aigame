@@ -6,7 +6,7 @@ import QtQuick 2.0
 //
 Enemy {
     id: scout
-    avatar: "../assets/ships/scout.png"
+    avatar: "../../assets/ships/scout.png"
     score: 150
 
     property real verticalRange: 150

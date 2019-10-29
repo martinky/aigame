@@ -1,5 +1,6 @@
 import Felgo 3.0
 import QtQuick 2.0
+import"../entities"
 
 //
 // Basic building blocks of a level: holds and controls the player entity,

@@ -20,7 +20,7 @@ EntityBase {
             frameDuration: 30
             frameWidth: 64
             frameHeight: 64
-            source: "../assets/effects/explosion.png"
+            source: "../../assets/effects/explosion.png"
         }
     }
 

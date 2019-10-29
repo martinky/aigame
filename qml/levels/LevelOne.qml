@@ -1,10 +1,11 @@
 import Felgo 3.0
 import QtQuick 2.0
+import "../entities"
 
 Level {
     id: level
 
-    backgroundImage: "../assets/background/desert.png"
+    backgroundImage: "../../assets/background/desert.png"
 
     // enemies in this level
 

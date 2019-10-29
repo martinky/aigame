@@ -58,21 +58,3 @@ win32 {
 macx {
     ICON = macx/app_icon.icns
 }
-
-DISTFILES += \
-    qml/Player.qml \
-    qml/Explosion.qml \
-    qml/PlayerProjectile.qml \
-    qml/Enemy.qml \
-    qml/EnemyProjectile.qml \
-    qml/Plane.qml \
-    qml/Scout.qml \
-    qml/Turbo.qml \
-    qml/Ship.qml \
-    qml/SceneBase.qml \
-    qml/GameOverScene.qml \
-    qml/GameScene.qml \
-    qml/LevelOne.qml \
-    qml/Level.qml \
-    qml/LevelTwo.qml \
-    qml/SplashScene.qml

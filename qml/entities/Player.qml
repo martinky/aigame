@@ -9,7 +9,7 @@ Ship {
     id: player
     entityType: "player"
 
-    avatar: "../assets/ships/ufo.png"
+    avatar: "../../assets/ships/ufo.png"
 
     property bool firing: false
 
