@@ -61,6 +61,10 @@ GameWindow {
         id: gameOverScene
     }
 
+    SplashScene {
+        id: splashScene
+    }
+
     Timer {
         id: gameOverTimer
         interval: 1000
@@ -71,9 +75,14 @@ GameWindow {
         }
     }
 
-    state: "GAME"
+    state: "SPLASH"
 
     states: [
+        State {
+            name: "SPLASH"
+            PropertyChanges { target: splashScene; opacity: 1 }
+            PropertyChanges { target: gameWindow; activeScene: splashScene }
+        },
         State {
             name: "GAME"
             PropertyChanges { target: gameScene; opacity: 1 }
@@ -84,7 +93,6 @@ GameWindow {
             PropertyChanges { target: gameOverScene; opacity: 1 }
             PropertyChanges { target: gameWindow; activeScene: gameOverScene }
         }
-        //TODO: splash scene
     ]
 
 }
