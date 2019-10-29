@@ -18,13 +18,10 @@ Ship {
 
     onCollided: {
         if (collidedEntity.entityType === "playerProjectile") {
+            gameScene.score += score
             collidedEntity.removeEntity()
             explode()
         }
-    }
-
-    onShipDestroyed: {
-        gameScene.score += score
     }
 
     MovementAnimation {

@@ -12,15 +12,21 @@ EntityBase {
 
     property alias avatar: img.source
 
-    signal shipDestroyed()
     signal collided(var collidedEntity)
 
     // Replaces the ship with an explosion animation.
     function explode() {
-        createExplosion(ship.x + ship.width / 2,
-                        ship.y + ship.height / 2)
+        var explosionProperties = {
+            x: ship.x + ship.width / 2 - 32,
+            y: ship.y + ship.height / 2 - 32,
+            rotation: 0
+        }
+
+        entityManager.createEntityFromUrlWithProperties(
+                    Qt.resolvedUrl("Explosion.qml"),
+                    explosionProperties);
+
         ship.removeEntity()
-        shipDestroyed()
     }
 
     Image {

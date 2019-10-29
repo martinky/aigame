@@ -21,19 +21,14 @@ Ship {
     }
 
     onCollided: {
-        if (collidedEntity.entityType === "enemyProjectile") {
-            collidedEntity.removeEntity()
+        if (collidedEntity.entityType === "enemyProjectile" || collidedEntity.entityType === "enemy") {
+            gameWindow.setGameOver()
+            if (collidedEntity.entityType === "enemy")
+                collidedEntity.explode()
+            else
+                collidedEntity.removeEntity()
             explode()
         }
-        if (collidedEntity.entityType === "enemy") {
-            collidedEntity.explode()
-            explode()
-        }
-    }
-
-    onShipDestroyed: {
-        gameWindow.setGameOver()
-        console.log("GAME OVER")
     }
 
     Behavior on x { SmoothedAnimation { velocity: 300 } }

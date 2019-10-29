@@ -9,7 +9,6 @@ SceneBase {
     property bool victory: false
 
     // array of level source files
-    property string levelsBaseDir: "../levels/"
     property variant levels: []
     property int currentLevel_: 0
 
@@ -22,7 +21,7 @@ SceneBase {
         entityManager.removeAllEntities()
         levelLoader.source = ""
         if (currentLevel_ < levels.length) {
-            levelLoader.source = levelsBaseDir + levels[currentLevel_]
+            levelLoader.source = levels[currentLevel_]
         }
     }
 
@@ -44,7 +43,7 @@ SceneBase {
             currentLevel_ ++
             if (currentLevel_ < levels.length) {
                 // go to next level...
-                levelLoader.source = levelsBaseDir + levels[currentLevel_]
+                levelLoader.source = levels[currentLevel_]
             } else {
                 // or declare victory if already at last level
                 levelLoader.source = ""

@@ -24,18 +24,6 @@ GameWindow {
     property alias entityManager: entityManager
     property alias gameScene: gameScene
 
-    function createExplosion(x, y) {
-        var explosionProperties = {
-            x: x - 32,
-            y: y - 32,
-            rotation: 0
-        }
-
-        entityManager.createEntityFromUrlWithProperties(
-                    Qt.resolvedUrl("Explosion.qml"),
-                    explosionProperties);
-    }
-
     function resetGame() {
         state = "GAME"
         gameScene.reset()
@@ -53,7 +41,10 @@ GameWindow {
     GameScene {
         id: gameScene
 
-        levels: [ "LevelOne.qml", "LevelTwo.qml" ]
+        levels: [
+            Qt.resolvedUrl("levels/LevelOne.qml"),
+            Qt.resolvedUrl("levels/LevelTwo.qml")
+        ]
 
         onGameFinished: setGameOver()
     }
