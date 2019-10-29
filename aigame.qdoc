@@ -1,45 +1,509 @@
 /*!
-    \page index
 
-    Welcome to the Alien Invasion game tutorial.
+\page index
 
-    \section1 API Documentation
-    Generated documentation for main QML types:
+Welcome to the Alien Invasion game tutorial.
 
+This is my attempt at creating a mobile game using the Felgo SDK (also known
+as V-Play) - \l{https://felgo.com}
+
+\section1 Introduction
+
+Alien Invasion is an original game concept that I implemented way back as a
+school assignment project. This a recreation of that old game using
+\l{https://felgo.com}{Felgo SDK} and the \l{https://en.wikipedia.org/wiki/QML}{QML}
+language.
+
+This time, you play for the bad guys - aliens from space! Your goal is to
+destroy as many aircraft that come to defend poor Earth, as possible. Other
+than that, it's a very simple side scroller arcade game.
+
+You control the UFO on the left by tappig on the screen. The UFO goes where the
+finger goes. While the finger is on the screen, the UFO fires deadly
+space bullets. Try to destroy as many enemies as possible. Avoid crashing your
+UFO into enemy vessels and avoid enemy projectiles.
+
+\image screenshot.png
+
+The game consists of one or more levels. Each level is a sequence of enemy
+ships. Enemies appear on the right edge of the screen and travel towards the
+player. The player controls an UFO ship at the left end of the screen and tries
+to destroy as many enemies as possible. The graphics of a level consist of a
+nice scrolling background.
+
+\section1 Let's start
+
+A good way to start this game project is the New Project wizard in Qt Creator
+that comes installed with Felgo SDK. Select \b{File} -> \b{New File or Project}
+-> \b{Felgo Games} -> \b{New - Empty Felgo 3 Project}. Follow the wizard,
+choose a project directory and name and let Qt Creator create the necessary
+files for you.
+
+You should end up with a new project, with a \b{Main.qml} file. This is going
+to be our starting point.
+
+\section2 Graphics Assets
+
+The graphics assets for this game can be downloaded from the GitHub repository
+\l{https://github.com/martinky/aigame/tree/master/assets}. Simply copy the
+content (including subdirectories) into the \b{assets} directory in your project.
+
+\section1 Game Entities
+
+Let's start by defining the game entities. These are the interactive elements
+of the game. There will be 3 main categories of entities:
+
+\list
+\li ships
+\li projectiles
+\li effects
+\endlist
+
+Ships are the main ones - these include the \l Player ship - the UFO, and all
+the \l Enemy ship types (\l Plane, \l Scout, \l Turbo). We will use inheritance
+to abstract away common parts and logic of these entities.
+
+\image ship_class_diagram.png
+
+There will be two projectile types: \l PlayerProjectile is fired by the
+\l Player ship, and \l EnemyProjectile which are fired by \l Enemy ships.
+
+And last, we will have an \l Explosion effect.
+
+\section2 Abstract Base Ship
+
+Create a new QML file \b{qml/entities/Ship.qml} with the following content:
+
+\qml
+import Felgo 3.0
+import QtQuick 2.0
+
+EntityBase {
+    id: ship
+
+    width: img.implicitWidth
+    height: img.implicitHeight
+
+    property alias avatar: img.source
+
+    signal collided(var collidedEntity)
+
+    Image {
+        id: img
+    }
+
+    BoxCollider {
+        id: collider
+        anchors.fill: img
+        anchors.margins: 5
+        collisionTestingOnlyMode: true
+
+        fixture.onBeginContact: {
+            var body = other.getBody();
+            var collidedEntity = body.target;
+            collided(collidedEntity)
+        }
+    }
+}
+\endqml
+
+This will be our base \l Ship. It is simply an \b Image (we will call it an 'avatar')
+with a \b BoxCollider.
+We want to handle collisions ourselves, as this will be the basis for our game
+logic, so we set the \b collisionTestingOnlyMode property to \b false.
+Otherwise the built-in physics engine would try to resolve all colliding objects
+for us.
+When a collision with another entity is detected, this will be reported by
+triggering the \b collided() signal - this will be handled specifically in derived
+types, as we will see later in this tutorial.
+
+\section2 Explosion Effect
+
+\image explosion.png
+
+Let's add an explosion effect - create a new QML file \b{qml/entities/Explosion.qml}
+with the following content:
+
+\qml
+import QtQuick 2.0
+import Felgo 3.0
+
+EntityBase {
+    id: explosion
+    entityType: "explosion"
+    width: 64
+    height: 64
+
+    SpriteSequence {
+        anchors.centerIn: parent
+
+        Sprite {
+            id: sprite
+            name: "explosion"
+            frameCount: 25
+            frameDuration: 30
+            frameWidth: 64
+            frameHeight: 64
+            source: "../../assets/effects/explosion.png"
+        }
+    }
+
+    Timer {
+        interval: sprite.frameCount * sprite.frameDuration
+        running: true
+        onTriggered: {
+            explosion.removeEntity()
+        }
+    }
+}
+\endqml
+
+This is a trivial entity that animates a nice explosion using a \b SpriteSequence.
+Once the animation plays out, the explosion entity is removed from the scene thanks
+to the single-shot \b Timer.
+
+Now let's add the ability to explode to our abstract \l Ship. Add the following code to \b{Ship.qml}
+
+\qml
+    function explode() {
+        var explosionProperties = {
+            x: ship.x + ship.width / 2 - 32,
+            y: ship.y + ship.height / 2 - 32,
+            rotation: 0
+        }
+
+        entityManager.createEntityFromUrlWithProperties(
+                    Qt.resolvedUrl("Explosion.qml"),
+                    explosionProperties);
+
+        ship.removeEntity()
+    }
+\endqml
+
+\section2 Projectiles
+
+\image projectiles.png
+
+We need two types of projectiles - those fired by the \l Player, and those fired
+by \l Enemy ships. Let's create two more QML files:
+
+\b{qml/entities/PlayerProjectile.qml}
+
+\qml
+import QtQuick 2.0
+import Felgo 3.0
+
+EntityBase {
+    id: playerProjectile
+    entityType: "playerProjectile"
+    width: img.implicitWidth
+    height: img.implicitHeight
+
+    Image {
+        id: img
+        source: "../../assets/projectiles/bullet.png"
+    }
+
+    BoxCollider {
+        id: collider
+        anchors.fill: img
+        collisionTestingOnlyMode: true
+        bullet: true
+    }
+
+    MovementAnimation {
+        target: playerProjectile
+        property: "x"
+        maxPropertyValue: gameScene.width
+        velocity: 300
+        running: true
+        onLimitReached: {
+            playerProjectile.removeEntity()
+        }
+    }
+}
+\endqml
+
+\b{qml/entities/EnemyProjectile.qml}
+
+\qml
+import QtQuick 2.0
+import Felgo 3.0
+
+EntityBase {
+    id: enemyProjectile
+    entityType: "enemyProjectile"
+    width: img.implicitWidth
+    height: img.implicitHeight
+
+    property real speed: 300
+
+    Image {
+        id: img
+        source: "../../assets/projectiles/shot.png"
+    }
+
+    BoxCollider {
+        id: collider
+        anchors.fill: img
+        collisionTestingOnlyMode: true
+        bullet: true
+    }
+
+    MovementAnimation {
+        target: enemyProjectile
+        property: "x"
+        minPropertyValue: -enemyProjectile.width
+        velocity: -enemyProjectile.speed
+        running: true
+        onLimitReached: {
+            enemyProjectile.removeEntity()
+        }
+    }
+}
+\endqml
+
+Both projectile types are quite similar - an \b Image item, a \b BoxCollider
+and a \b MovementAnimation. Setting an appropriate name to the \b entityType
+property will help us distinguish between different projectile types in the
+collision game logic code, as we will see later.
+
+Another difference is, that player projectiles move from left to right, and
+enemy projectiles move from right to left - therefore the negative velocity in
+the MovementAnimation.
+
+Again, we want to do our own collision logic, so we set the \b collisionTestingOnlyMode
+of the \b BoxCollider to \b false. Setting the \b bullet property to \b true is
+recommended for small, fast moving entities. Otherwise the physics engine may
+miss a collision, if a small entity moves so fast, that it basically skips over
+another entity between two consecutive frames.
+
+\section2 Abstract Enemy Ship
+
+Here we are going to write down common behavior of all \l Enemy ships. Create
+another QML file \b{qml/entities/Enemy.qml} with the following content:
+
+\qml
+import Felgo 3.0
+import QtQuick 2.0
+
+Ship {
+    id: enemy
+    entityType: "enemy"
+
+    property int score: 100
+
+    property real speed: 100
+    property bool firing: false
+    property int firingInterval: 1500
+    property real projectileSpeed: 200
+
+    onCollided: {
+        if (collidedEntity.entityType === "playerProjectile") {
+            gameScene.score += score
+            collidedEntity.removeEntity()
+            explode()
+        }
+    }
+
+    MovementAnimation {
+        target: enemy
+        property: "x"
+        minPropertyValue: -enemy.width
+        velocity: -enemy.speed
+        running: true
+        onLimitReached: {
+            enemy.removeEntity()
+        }
+    }
+
+    Timer {
+        repeat: true
+        interval: enemy.firingInterval
+        running: enemy.firing && enemy.x < gameScene.width
+        triggeredOnStart: true
+        onTriggered: {
+            var projectileProperties = {
+                x: enemy.x,
+                y: enemy.y + enemy.height / 2 - 5,
+                rotation: 0,
+                speed: enemy.projectileSpeed
+            }
+
+            entityManager.createEntityFromUrlWithProperties(
+                        Qt.resolvedUrl("EnemyProjectile.qml"),
+                        projectileProperties);
+        }
+    }
+}
+\endqml
+
+All \l Enemy ships travel from beyond the right edge of the screen to the left,
+towards the player, therefore the negative \b velocity in the \b MovementAnimation.
+
+We introduce some properties that will help us distinguish between multiple
+concrete enemy ship types. The \b score property holds the number of points
+the Player is awarded for destroying this Enemy.
+
+We can also control the Enemy ship's \b speed.
+
+Enemy ships have also the possibility of firing projectiles. This is controlled
+by the \b firing boolean property and is handled using a simple \b Timer,
+that dynamically creates projectile entities at the set \b firingInterval.
+The \b projectileSpeed can also be modifies using a property.
+
+Here we also handle collision of the \l Enemy ship with a \l PlayerProjectile
+here. When this happens, the Ship entity is replaced an \l Explosion entity.
+Also we need to remove the projectile entity that killed this ship, so it does
+not continue flying and destroying other ships. Last but not least, we award
+the player score points for destroing an enemy. Player score is kept inside the
+\l GameScene item, as we will see later.
+
+\section2 Concrete Enemy Ship Types
+
+Using the abstract \l Enemy type, we can create as many concrete enemy ships
+as we want, by simply creating a derived QML type for each ship type and
+customizing its properties.
+
+\image ships.png
+
+Let's introduce the \l Plane enemy ship. Add a new QML file \b{qml/entities/Plane.qml}
+with the following content:
+
+\qml
+import Felgo 3.0
+import QtQuick 2.0
+
+Enemy {
+    avatar: "../../assets/ships/plane.png"
+    score: 10
+    speed: 100
+}
+\endqml
+
+Create the other two ship types \l Scout and \l Turbo accordingly. How you set
+the properties of those individual ship types, does not matter. Feel free to try
+different things. You can also try adding some more complex behavior, for example
+by animating the x, y coordinates in a different way.
+
+\section2 Player Ship
+
+\image ufo.png
+
+The \l Player is a special kind of \l Ship entity that is controlled by the
+user's input. The control scheme is very simple - the Player ship follows
+where the finger touches the screen. Also, while the finger touches, this ship
+will continue firing projectiles.
+
+Let's create the Player entity by introducing a new QML file \b{qml/entities/Player.xml}
+with the following content:
+
+\qml
+import QtQuick 2.0
+import Felgo 3.0
+
+Ship {
+    id: player
+    entityType: "player"
+
+    avatar: "../../assets/ships/ufo.png"
+
+    property bool firing: false
+
+    function move(x, y, firing) {
+        player.x = x - player.width / 2
+        player.y = y - player.height / 2
+        player.firing = firing
+    }
+
+    onCollided: {
+        if (collidedEntity.entityType === "enemyProjectile" || collidedEntity.entityType === "enemy") {
+            gameWindow.setGameOver()
+            if (collidedEntity.entityType === "enemy")
+                collidedEntity.explode()
+            else
+                collidedEntity.removeEntity()
+            explode()
+        }
+    }
+
+    Behavior on x { SmoothedAnimation { velocity: 300 } }
+    Behavior on y { SmoothedAnimation { velocity: 300 } }
+
+    Timer {
+        repeat: true
+        interval: 200
+        running: player.firing
+        triggeredOnStart: true
+        onTriggered: {
+            var projectileProperties = {
+                x: player.x + 100,
+                y: player.y + 18,
+                rotation: 0
+            }
+            entityManager.createEntityFromUrlWithProperties(
+                        Qt.resolvedUrl("PlayerProjectile.qml"),
+                        projectileProperties);
+        }
+    }
+}
+\endqml
+
+Similar to \l Enemy ships, the \l Player can also fire projectiles - by creating
+\l PlayerProjectile entities using a \b Timer.
+
+By setting a \b SmoothedAnimation Behavior on the x, y properties, we limit
+how fast can the Player ship move between two points. This ensures smooth
+motion and avoids sudden teleportation, if the user just taps the screen in
+diferent places rapidly. The \b move() function is only a convenience function
+to set all three attributes (x, y, firing) at once.
+
+The collision code in the \b onCollided handler tests if the Player collided
+either with an \b enemy or \b enemyProjectile entity type. In either case, it's
+game over for the player. The game transitions into \b GAME_OVER state. This is
+done by calling \b{gameWindow.setGameOver()}. We'll see in a minute, what
+actually happense there.
+
+TODO: Continue here ... Levels, Scenes
+
+\section1 API Documentation
+Generated documentation for main QML types:
+
+\list
+    \li \l Main
+    \li Entities
     \list
-        \li \l Main
-        \li Entities
+        \li \l Ship
         \list
-            \li \l Ship
+            \li \l Player
+            \li \l Enemy
             \list
-                \li \l Player
-                \li \l Enemy
-                \list
-                    \li \l Plane
-                    \li \l Scout
-                    \li \l Turbo
-                \endlist
-            \endlist
-            \li \l PlayerProjectile
-            \li \l EnemyProjectile
-            \li \l Explosion
-        \endlist
-        \li Scenes
-        \list
-            \li \l SceneBase
-            \list
-                \li \l GameScene
-                \li \l GameOverScene
-                \li \l SplashScene
+                \li \l Plane
+                \li \l Scout
+                \li \l Turbo
             \endlist
         \endlist
-        \li Levels
+        \li \l PlayerProjectile
+        \li \l EnemyProjectile
+        \li \l Explosion
+    \endlist
+    \li Scenes
+    \list
+        \li \l SceneBase
         \list
-            \li \l Level
-            \list
-                \li LevelOne
-                \li LevelTwo
-            \endlist
+            \li \l GameScene
+            \li \l GameOverScene
+            \li \l SplashScene
         \endlist
     \endlist
+    \li Levels
+    \list
+        \li \l Level
+        \list
+            \li LevelOne
+            \li LevelTwo
+        \endlist
+    \endlist
+\endlist
+
 */
