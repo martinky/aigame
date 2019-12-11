@@ -28,7 +28,7 @@ EntityBase {
         interval: sprite.frameCount * sprite.frameDuration
         running: true
         onTriggered: {
-            explosion.removeEntity()
+            explosion.removeEntity();
         }
     }
 }

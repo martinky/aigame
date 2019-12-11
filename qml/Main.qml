@@ -31,13 +31,15 @@ GameWindow {
 
     /*! Starts a new game. */
     function resetGame() {
-        state = "GAME"
-        gameScene.reset()
+        state = "GAME";
+        gameScene.reset();
     }
 
     /*! Displays an end game screen. */
     function setGameOver() {
-        gameOverTimer.restart()
+        gameOverScene.score = gameScene.score;
+        gameOverScene.victory = gameScene.victory;
+        gameWindow.state = "GAME_OVER";
     }
 
     EntityManager {
@@ -58,20 +60,12 @@ GameWindow {
 
     GameOverScene {
         id: gameOverScene
+        onGoBack: resetGame()
     }
 
     SplashScene {
         id: splashScene
-    }
-
-    Timer {
-        id: gameOverTimer
-        interval: 1000
-        onTriggered: {
-            gameOverScene.score = gameScene.score
-            gameOverScene.victory = gameScene.victory
-            gameWindow.state = "GAME_OVER"
-        }
+        onGoBack: resetGame()
     }
 
     state: "SPLASH"

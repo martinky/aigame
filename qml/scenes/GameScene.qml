@@ -25,13 +25,13 @@ SceneBase {
 
     /*! Restarts the game from the first level. */
     function reset() {
-        currentLevel_ = 0
-        score = 0
-        victory = false
-        entityManager.removeAllEntities()
-        levelLoader.source = ""
+        currentLevel_ = 0;
+        score = 0;
+        victory = false;
+        entityManager.removeAllEntities();
+        levelLoader.source = "";
         if (currentLevel_ < levels.length) {
-            levelLoader.source = levels[currentLevel_]
+            levelLoader.source = levels[currentLevel_];
         }
     }
 
@@ -43,22 +43,21 @@ SceneBase {
     Loader {
         id: levelLoader
         anchors.fill: parent
-        source: levels[0]
     }
 
     Connections {
         target: levelLoader.item
         onLevelFinished: {
-            entityManager.removeAllEntities()
-            currentLevel_ ++
+            entityManager.removeAllEntities();
+            currentLevel_ ++;
             if (currentLevel_ < levels.length) {
                 // go to next level...
-                levelLoader.source = levels[currentLevel_]
+                levelLoader.source = levels[currentLevel_];
             } else {
                 // or declare victory if already at last level
-                levelLoader.source = ""
-                victory = true
-                gameFinished()
+                levelLoader.source = "";
+                victory = true;
+                gameFinished();
             }
         }
     }

@@ -24,19 +24,20 @@ Ship {
 
     /*! Moves the player ship to given position and changes the firing state. */
     function move(x, y, firing) {
-        player.x = x - player.width / 2
-        player.y = y - player.height / 2
-        player.firing = firing
+        player.x = x - player.width / 2;
+        player.y = y - player.height / 2;
+        player.firing = firing;
     }
 
     onCollided: {
         if (collidedEntity.entityType === "enemyProjectile" || collidedEntity.entityType === "enemy") {
-            gameWindow.setGameOver()
-            if (collidedEntity.entityType === "enemy")
-                collidedEntity.explode()
-            else
-                collidedEntity.removeEntity()
-            explode()
+            gameWindow.setGameOver();
+            if (collidedEntity.entityType === "enemy") {
+                collidedEntity.explode();
+            } else {
+                collidedEntity.removeEntity();
+            }
+            explode();
         }
     }
 
@@ -54,7 +55,7 @@ Ship {
                 x: player.x + 100,
                 y: player.y + 18,
                 rotation: 0
-            }
+            };
 
             entityManager.createEntityFromUrlWithProperties(
                         Qt.resolvedUrl("PlayerProjectile.qml"),

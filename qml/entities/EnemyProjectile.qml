@@ -37,7 +37,7 @@ EntityBase {
         velocity: -enemyProjectile.speed
         running: true
         onLimitReached: {
-            enemyProjectile.removeEntity()
+            enemyProjectile.removeEntity();
         }
     }
 }

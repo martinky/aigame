@@ -61,10 +61,10 @@ Item {
         repeat: true
 
         onTriggered: {
-            var enemies = entityManager.getEntityArrayByType("enemy")
-            if (enemies.length == 0) {
-                running = false
-                levelFinished()
+            var enemies = entityManager.getEntityArrayByType("enemy");
+            if (enemies.length === 0) {
+                finishTestTimer.running = false;
+                outroAnimation.start();
             }
         }
     }

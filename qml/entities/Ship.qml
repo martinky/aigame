@@ -29,13 +29,13 @@ EntityBase {
             x: ship.x + ship.width / 2 - 32,
             y: ship.y + ship.height / 2 - 32,
             rotation: 0
-        }
+        };
 
         entityManager.createEntityFromUrlWithProperties(
                     Qt.resolvedUrl("Explosion.qml"),
                     explosionProperties);
 
-        ship.removeEntity()
+        ship.removeEntity();
     }
 
     Image {
@@ -51,7 +51,7 @@ EntityBase {
         fixture.onBeginContact: {
             var body = other.getBody();
             var collidedEntity = body.target;
-            collided(collidedEntity)
+            collided(collidedEntity);
         }
     }
 }

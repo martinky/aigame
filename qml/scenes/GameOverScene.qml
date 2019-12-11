@@ -12,6 +12,8 @@ SceneBase {
         if the player was destroyed and this is game over. */
     property bool victory: false
 
+    signal goBack
+
     Rectangle {
         anchors.fill: parent
         color: "black"
@@ -55,9 +57,7 @@ SceneBase {
     MouseArea {
         anchors.fill: parent
 
-        onPressed: {
-            gameWindow.resetGame()
-        }
+        onPressed: goBack()
     }
 
 }

@@ -6,6 +6,8 @@ import QtQuick 2.0
 */
 SceneBase {
 
+    signal goBack
+
     Rectangle {
         anchors.fill: parent
         color: "black"
@@ -22,7 +24,7 @@ SceneBase {
             font.pixelSize: 36
             font.bold: true
 
-            text: "ALIEN INVASION"
+            text: "ALIEN INVASION!"
         }
 
         Text {
@@ -38,9 +40,7 @@ SceneBase {
     MouseArea {
         anchors.fill: parent
 
-        onPressed: {
-            gameWindow.resetGame()
-        }
+        onPressed: goBack()
     }
 
 }

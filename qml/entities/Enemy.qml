@@ -35,9 +35,9 @@ Ship {
 
     onCollided: {
         if (collidedEntity.entityType === "playerProjectile") {
-            gameScene.score += score
-            collidedEntity.removeEntity()
-            explode()
+            gameScene.score += score;
+            collidedEntity.removeEntity();
+            explode();
         }
     }
 
@@ -48,7 +48,7 @@ Ship {
         velocity: -enemy.speed
         running: true
         onLimitReached: {
-            enemy.removeEntity()
+            enemy.removeEntity();
         }
     }
 
@@ -64,7 +64,7 @@ Ship {
                 y: enemy.y + enemy.height / 2 - 5,
                 rotation: 0,
                 speed: enemy.projectileSpeed
-            }
+            };
 
             entityManager.createEntityFromUrlWithProperties(
                         Qt.resolvedUrl("EnemyProjectile.qml"),
