@@ -6,6 +6,7 @@ Level {
     id: level
 
     backgroundImage: "../../assets/background/desert.png"
+    introText: "New Mexico, 1957"
 
     // enemies in this level
 
