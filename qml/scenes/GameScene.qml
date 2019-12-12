@@ -24,15 +24,19 @@ SceneBase {
     signal gameFinished()
 
     /*! Restarts the game from the first level. */
-    function reset() {
-        currentLevel_ = 0;
+    function reset(levelIndex) {
+        currentLevel_ = levelIndex === undefined ? 0 : levelIndex;
         score = 0;
         victory = false;
         entityManager.removeAllEntities();
         levelLoader.source = "";
         if (currentLevel_ < levels.length) {
-            levelLoader.source = levels[currentLevel_];
+            setLevel_(currentLevel_);
         }
+    }
+
+    function setLevel_(index) {
+        levelLoader.setSource(levels[index].url, { levelCode: levels[index].code });
     }
 
     PhysicsWorld {
@@ -52,7 +56,7 @@ SceneBase {
             currentLevel_ ++;
             if (currentLevel_ < levels.length) {
                 // go to next level...
-                levelLoader.source = levels[currentLevel_];
+                setLevel_(currentLevel_);
             } else {
                 // or declare victory if already at last level
                 levelLoader.source = "";

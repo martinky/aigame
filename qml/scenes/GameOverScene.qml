@@ -50,7 +50,7 @@ SceneBase {
             color: "red"
             font.pixelSize: 16
 
-            text: "Tap the screen to begin a new game."
+            text: "Tap the screen to continue..."
         }
     }
 

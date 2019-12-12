@@ -30,9 +30,18 @@ GameWindow {
     property alias gameScene: gameScene
 
     /*! Starts a new game. */
-    function resetGame() {
+    function resetGame(levelIndex) {
         state = "GAME";
-        gameScene.reset();
+        gameScene.reset(levelIndex);
+    }
+
+    function resetGameWithLevel(code) {
+        var levelIndex = gameScene.levels.findIndex(lvl => lvl.code == code);
+        console.log("ENTERING LEVEL " + levelIndex);
+
+        if (levelIndex >= 0) {
+            resetGame(levelIndex);
+        }
     }
 
     /*! Displays an end game screen. */
@@ -51,8 +60,8 @@ GameWindow {
         id: gameScene
 
         levels: [
-            Qt.resolvedUrl("levels/LevelOne.qml"),
-            Qt.resolvedUrl("levels/LevelTwo.qml")
+            { url: Qt.resolvedUrl("levels/LevelOne.qml"), code: "XYGA" },
+            { url: Qt.resolvedUrl("levels/LevelTwo.qml"), code: "UVFQ" }
         ]
 
         onGameFinished: setGameOver()
@@ -60,12 +69,19 @@ GameWindow {
 
     GameOverScene {
         id: gameOverScene
-        onGoBack: resetGame()
+        onGoBack: gameWindow.state = "MENU" // resetGame()
     }
 
     SplashScene {
         id: splashScene
-        onGoBack: resetGame()
+        onFinished: gameWindow.state = "MENU" // resetGame()
+    }
+
+    MenuScene {
+        id: menuScene
+        onStartGame: resetGame()
+        onGoToLevel: resetGameWithLevel(code)
+        onQuit: Qt.quit()
     }
 
     state: "SPLASH"
@@ -75,6 +91,11 @@ GameWindow {
             name: "SPLASH"
             PropertyChanges { target: splashScene; opacity: 1 }
             PropertyChanges { target: gameWindow; activeScene: splashScene }
+        },
+        State {
+            name: "MENU"
+            PropertyChanges { target: menuScene; opacity: 1 }
+            PropertyChanges { target: gameWindow; activeScene: menuScene }
         },
         State {
             name: "GAME"

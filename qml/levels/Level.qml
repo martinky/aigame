@@ -24,6 +24,9 @@ Item {
     /*! Name of the level that is shown at level beginning. */
     property alias introText: levelNameText.text
 
+    /*! Code to enter the level directly from main menu. */
+    property string levelCode: "XXXX"
+
     /*! This signal is triggered once all enemies are cleared: either destroyed
         or went past the left edge of the screen. */
     signal levelFinished()
@@ -37,14 +40,32 @@ Item {
         color: "black"
         opacity: 0
 
-        Text {
-            id: levelNameText
+        Column {
             anchors.centerIn: parent
+            spacing: 50
 
-            color: "red"
-            font.pixelSize: 36
-            font.bold: true
+            Text {
+                id: levelNameText
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                color: "red"
+                font.pixelSize: 36
+                font.bold: true
+            }
+
+            Text {
+                id: levelCodeText
+
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                color: "red"
+                font.pixelSize: 24
+                font.bold: true
+
+                text: "CODE: " + level.levelCode
+            }
         }
+
     }
 
     Item {

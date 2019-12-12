@@ -6,7 +6,7 @@ import QtQuick 2.0
 */
 SceneBase {
 
-    signal goBack
+    signal finished
 
     Rectangle {
         anchors.fill: parent
@@ -33,14 +33,21 @@ SceneBase {
             color: "red"
             font.pixelSize: 16
 
-            text: "Tap the screen to begin a new game."
+            text: "Tap the screen to continue..."
         }
+    }
+
+    Timer {
+        interval: 5000
+        running: true
+        repeat: false
+        onTriggered: finished()
     }
 
     MouseArea {
         anchors.fill: parent
 
-        onPressed: goBack()
+        onPressed: finished()
     }
 
 }
