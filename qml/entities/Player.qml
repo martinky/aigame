@@ -37,6 +37,7 @@ Ship {
             } else {
                 collidedEntity.removeEntity();
             }
+            soundExplosion.play();
             explode();
         }
     }
@@ -57,9 +58,15 @@ Ship {
                 rotation: 0
             };
 
+            soundShot.play();
             entityManager.createEntityFromUrlWithProperties(
                         Qt.resolvedUrl("PlayerProjectile.qml"),
                         projectileProperties);
         }
+    }
+
+    SoundEffect {
+        id: soundShot
+        source: "../../assets/sounds/pshot.wav"
     }
 }

@@ -84,6 +84,13 @@ GameWindow {
         onQuit: Qt.quit()
     }
 
+    // global sounds
+
+    SoundEffect {
+        id: soundExplosion
+        source: "../assets/sounds/pexplosion.wav"
+    }
+
     state: "SPLASH"
 
     states: [

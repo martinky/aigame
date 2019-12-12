@@ -35,7 +35,10 @@ SceneBase {
 
             text: "NEW GAME!"
 
-            onClicked: startGame()
+            onClicked: {
+                soundButton.play();
+                startGame();
+            }
         }
 
         MenuButton {
@@ -45,6 +48,7 @@ SceneBase {
             text: "ENTER CODE"
 
             onClicked: {
+                soundButton.play();
                 codeInputItem.visible = true;
                 codeInputBtn.visible = false;
                 codeInputText.text = "";
@@ -88,6 +92,7 @@ SceneBase {
             MenuButton {
                 text: "GO"
                 onClicked: {
+                    soundButton.play();
                     codeInputItem.visible = false;
                     codeInputBtn.visible = true;
                     goToLevel(codeInputText.text.toUpperCase());
@@ -108,8 +113,17 @@ SceneBase {
 
             text: "QUIT"
 
-            onClicked: quit()
+            onClicked: {
+                soundButton.play();
+                quit();
+            }
         }
+    }
+
+
+    SoundEffect {
+        id: soundButton
+        source: "../../assets/sounds/beep.wav"
     }
 
 }

@@ -6,6 +6,7 @@ Level {
     id: level
 
     backgroundImage: "../../assets/background/canyon.png"
+    introSound: "../../assets/sounds/level_intro2.wav"
     introText: "Area 51, Groom Lake, Nevada, 1960"
 
     // enemies in this level

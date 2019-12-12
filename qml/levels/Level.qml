@@ -24,6 +24,9 @@ Item {
     /*! Name of the level that is shown at level beginning. */
     property alias introText: levelNameText.text
 
+    /*! Sound played at the start of the level to set the mood. */
+    property alias introSound: levelIntroSound.source
+
     /*! Code to enter the level directly from main menu. */
     property string levelCode: "XXXX"
 
@@ -32,6 +35,10 @@ Item {
     signal levelFinished()
 
     default property alias content: content.children
+
+    SoundEffect {
+        id: levelIntroSound
+    }
 
     Rectangle {
         id: intro
@@ -137,5 +144,8 @@ Item {
         }
     }
 
-    Component.onCompleted: introAnimation.start()
+    Component.onCompleted: {
+        introAnimation.start();
+        levelIntroSound.play();
+    }
 }

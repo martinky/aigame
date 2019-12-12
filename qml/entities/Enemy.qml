@@ -37,6 +37,7 @@ Ship {
         if (collidedEntity.entityType === "playerProjectile") {
             gameScene.score += score;
             collidedEntity.removeEntity();
+            soundExplosion.play();
             explode();
         }
     }
@@ -66,9 +67,15 @@ Ship {
                 speed: enemy.projectileSpeed
             };
 
+            soundShot.play();
             entityManager.createEntityFromUrlWithProperties(
                         Qt.resolvedUrl("EnemyProjectile.qml"),
                         projectileProperties);
         }
+    }
+
+    SoundEffect {
+        id: soundShot
+        source: "../../assets/sounds/pshot.wav"
     }
 }
